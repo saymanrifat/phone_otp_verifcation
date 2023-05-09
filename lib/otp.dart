@@ -15,24 +15,24 @@ class _MyOtpState extends State<MyOtp> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
           fontSize: 20,
           color: Color.fromRGBO(30, 60, 87, 1),
           fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
-        border: Border.all(color: Color.fromRGBO(234, 239, 243, 1)),
-        borderRadius: BorderRadius.circular(20),
-      ),
+          border: Border.all(color: const Color.fromRGBO(234, 239, 243, 1)),
+          borderRadius: BorderRadius.circular(20),
+          color: const Color.fromRGBO(238, 238, 238, 100)),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: Color.fromRGBO(114, 178, 238, 1)),
+      border: Border.all(color: const Color.fromRGBO(114, 178, 238, 1)),
       borderRadius: BorderRadius.circular(8),
     );
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        color: Color.fromRGBO(234, 239, 243, 1),
+        color: const Color.fromRGBO(234, 239, 243, 1),
       ),
     );
 
@@ -45,7 +45,7 @@ class _MyOtpState extends State<MyOtp> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_new,
             color: Colors.black,
           ),
@@ -109,7 +109,7 @@ class _MyOtpState extends State<MyOtp> {
                     Navigator.pushNamed(context, 'otp');
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green.shade600,
+                    backgroundColor: Colors.green.shade600,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -120,7 +120,10 @@ class _MyOtpState extends State<MyOtp> {
               Container(
                   alignment: Alignment.topLeft,
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'phone', (route) => false);
+                      },
                       child: const Text(
                         'Edit Phone Number?',
                         style: TextStyle(color: Colors.black),
