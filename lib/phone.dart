@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MyPhone extends StatefulWidget {
   const MyPhone({Key? key}) : super(key: key);
+
+  static String verify = '';
 
   @override
   State<MyPhone> createState() => _MyPhoneState();
@@ -12,17 +15,15 @@ class _MyPhoneState extends State<MyPhone> {
 
   @override
   void initState() {
-    countryCode.text = '+91';
+    countryCode.text = '+88';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    String getNumber = '';
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -71,6 +72,7 @@ class _MyPhoneState extends State<MyPhone> {
                     SizedBox(
                       width: 40,
                       child: TextField(
+                        keyboardType: TextInputType.phone,
                         textAlign: TextAlign.center,
                         controller: countryCode,
                         decoration: InputDecoration(
@@ -90,6 +92,10 @@ class _MyPhoneState extends State<MyPhone> {
                     ),
                     Expanded(
                       child: TextField(
+                        keyboardType: TextInputType.phone,
+                        onChanged: (value) {
+                          getNumber = value.toString();
+                        },
                         decoration: InputDecoration(
                           hintText: 'Phone',
                           border: InputBorder.none,
@@ -106,11 +112,24 @@ class _MyPhoneState extends State<MyPhone> {
                 height: 45,
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'otp');
+                  onPressed: () async {
+                    await FirebaseAuth.instance.verifyPhoneNumber(
+                      phoneNumber: '${countryCode.text + getNumber}',
+                      verificationCompleted:
+                          (PhoneAuthCredential credential) {},
+                      verificationFailed: (FirebaseAuthException e) {},
+                      codeSent: (String verificationId, int? resendToken) {
+                        MyPhone.verify = verificationId;
+
+                        Navigator.pushNamed(context, 'otp');
+                      },
+                      codeAutoRetrievalTimeout: (String verificationId) {},
+                    );
+
+                    print('${countryCode.text + getNumber}');
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green.shade600,
+                    backgroundColor: Colors.green.shade600,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

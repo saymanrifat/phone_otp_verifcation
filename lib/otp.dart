@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:phone_otp_verifcation/phone.dart';
 import 'package:pinput/pinput.dart';
 
 class MyOtp extends StatefulWidget {
@@ -9,6 +11,9 @@ class MyOtp extends StatefulWidget {
 }
 
 class _MyOtpState extends State<MyOtp> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String smsNumber = '';
+
   @override
   Widget build(BuildContext context) {
     //PinPut Packages
@@ -87,16 +92,12 @@ class _MyOtpState extends State<MyOtp> {
                 height: 20,
               ),
               Pinput(
-                length: 6,
-                defaultPinTheme: defaultPinTheme,
-                focusedPinTheme: focusedPinTheme,
-                submittedPinTheme: submittedPinTheme,
-                validator: (s) {
-                  return s == '222222' ? null : 'Pin is incorrect';
+                onChanged: (value) {
+                  smsNumber = value;
                 },
-                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                length: 6,
                 showCursor: true,
-                onCompleted: (pin) => myToast(context, 'Success OTP: $pin'),
+                onCompleted: (pin) => print(pin),
               ),
               const SizedBox(
                 height: 20,
@@ -105,8 +106,22 @@ class _MyOtpState extends State<MyOtp> {
                 height: 45,
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'otp');
+                  onPressed: () async {
+                    // Create a PhoneAuthCredential with the code
+                    try {
+                      PhoneAuthCredential credential =
+                          PhoneAuthProvider.credential(
+                              verificationId: MyPhone.verify,
+                              smsCode: smsNumber);
+
+                      // Sign the user in (or link) with the credential
+                      await auth.signInWithCredential(credential);
+
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, 'dashboard', (route) => false);
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green.shade600,
@@ -134,21 +149,4 @@ class _MyOtpState extends State<MyOtp> {
       ),
     );
   }
-
-  myToast(context, massage) => ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(massage),
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(20),
-          shape: const StadiumBorder(),
-          action: SnackBarAction(
-            label: 'Dismiss',
-            disabledTextColor: Colors.white,
-            textColor: Colors.blue,
-            onPressed: () {
-              //Do whatever you want
-            },
-          ),
-        ),
-      );
 }
