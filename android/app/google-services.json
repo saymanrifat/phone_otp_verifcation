@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "706520027320",
+    "project_id": "phone-otp-verification-c2bb4",
+    "storage_bucket": "phone-otp-verification-c2bb4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706520027320:android:ee5a9094d0d4bc7dcd244d",
+        "android_client_info": {
+          "package_name": "com.example.phone_otp_verifcation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706520027320-n62a8gi0cbq0k3ktuhou22mgjhg8sau6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUXc4Yk4Gbn0q8_D2-oWMycUFyLLdyUqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706520027320-n62a8gi0cbq0k3ktuhou22mgjhg8sau6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
